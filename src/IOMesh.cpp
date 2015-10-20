@@ -82,38 +82,34 @@ void IOMesh::init(int _nx,int _ny){
 void IOMesh::transformOut(){
     
     
-    float dx = (OUTQuad->getIAVertex(3)->x-OUTQuad->getIAVertex(0)->x)/nx;
-    float dy = (OUTQuad->getIAVertex(1)->y-OUTQuad->getIAVertex(0)->y)/ny;
-    float xo = OUTQuad->getIAVertex(0)->x;
-    float yo = OUTQuad->getIAVertex(0)->y;
-    
+  
     //inVerts.resize((nx+1)*(ny+1));
     if(OUTQuad->perspective == false){
+        points.clear();
+        float dx = (OUTQuad->getIAVertex(3)->x-OUTQuad->getIAVertex(0)->x)/nx;
+        float dy = (OUTQuad->getIAVertex(1)->y-OUTQuad->getIAVertex(0)->y)/ny;
+        float xo = OUTQuad->getIAVertex(0)->x;
+        float yo = OUTQuad->getIAVertex(0)->y;
     for (int j = 0; j < ny+1; ++j){
         for (int i = 0; i < nx+1; ++i){
             float py = j*dy+yo;
             float px = i*dx+xo;
+            points.push_back(ofPoint(px,py));
             iaverts.iaverts[i+j*(nx+1)]->x = px;
             iaverts.iaverts[i+j*(nx+1)]->y = py;
         }}
     }
     
        else if(OUTQuad->perspective == true){
-           float dx = (OUTQuad->getIAVertex(3)->x-OUTQuad->getIAVertex(0)->x)/nx;
-           float dy = (OUTQuad->getIAVertex(1)->y-OUTQuad->getIAVertex(0)->y)/ny;
-           float xo = OUTQuad->getIAVertex(0)->x;
-           float yo = OUTQuad->getIAVertex(0)->y;
-           for (int j = 0; j < ny+1; ++j){
+            for (int j = 0; j < ny+1; ++j){
                for (int i = 0; i < nx+1; ++i){
-                   float py = j*dy+yo;
-                   float px = i*dx+xo;
-                   ofPoint point(px,py);
+                   ofPoint point(points[i+j*(nx+1)].x,points[i+j*(nx+1)].y);
                    ofPoint pointInScreen = ofxHomography::toScreenCoordinates(point, OUTQuad->homograph);
                    iaverts.iaverts[i+j*(nx+1)]->x = pointInScreen.x;
                    iaverts.iaverts[i+j*(nx+1)]->y = pointInScreen.y;
                }}
      }
-    
+
 }
 
 void IOMesh::drawOutput(){
@@ -125,7 +121,8 @@ void IOMesh::updateMesh(){
     for(int i = 0; i < iaverts.iaverts.size(); ++i){
         float x = iaverts.iaverts[i]->x;
         float y = iaverts.iaverts[i]->y;
-        mesh.setVertex(i, ofVec3f(x,y,0.0));
+        float z = 0;
+        mesh.setVertex(i, ofVec3f(x,y,z));
     }
     
 }

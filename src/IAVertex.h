@@ -26,6 +26,8 @@ class IAVertex : public ofxMSAInteractiveObject {
         float mouse_anchorX;
         float mouse_anchorY;
         bool drag;
+        bool depth;
+        int z;
         bool active;
         void set(float ix, float iy);
         bool hitTest(int tx, int ty) const;

@@ -49,6 +49,10 @@ void IAVertex::update() {
         x = getMouseX() + mouse_anchorX;
         y = getMouseY() + mouse_anchorY;
     }
+    if(depth){
+        
+        z = getMouseY() + mouse_anchorY;
+    }
 }
 
 void IAVertex::draw() {
@@ -82,17 +86,26 @@ void IAVertex::onMouseMove(int x, int y)
 
 void IAVertex::onDragOver(int x, int y, int button) {
     if (activeIAVertex == this){
+        if(button == OF_MOUSE_BUTTON_LEFT){
         //this->x = x + mouse_anchorX;
         //this->y = y + mouse_anchorY;
-        drag = true;
-    }
+            drag = true;}
+        else if(button == OF_MOUSE_BUTTON_RIGHT){
+            depth = true;}
+        }
 }
+
 
 void IAVertex::onDragOutside(int x, int y, int button) {
     if (activeIAVertex == this){
         //this->x = x + mouse_anchorX;
         //this->y = y + mouse_anchorY;
+        if(button == OF_MOUSE_BUTTON_LEFT){
+
         drag = true;
+        }
+        else if(button == OF_MOUSE_BUTTON_RIGHT){
+            depth = true;}
     }
 }
 

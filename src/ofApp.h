@@ -5,7 +5,6 @@
 #include "IAQuad.h"
 #include "IOMesh.h"
 #include "ofxSyphon.h"
-#include "ofxGui.h"
 #include "ofxDatGui.h"
 
 #define		IDLE_COLOR		0x2aa198
@@ -31,11 +30,7 @@ class ofApp : public ofBaseApp{
     
         bool editVtcs;
     
-   /* ofxPanel gui;
-    ofxSlider<int> meshX;
-    ofxSlider<int> meshY;
-    ofxToggle setMesh;
-    */
+
     ofxDatGui* Datgui;
     void onButtonEvent(ofxDatGuiButtonEvent e);
     void onSliderEvent(ofxDatGuiSliderEvent e);
@@ -50,5 +45,5 @@ class ofApp : public ofBaseApp{
         ofxSyphonClient syphonClient;
         ofFbo syFbo;
         bool proMode;
-    bool inputMode;
+        bool inputMode;
 };

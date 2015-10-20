@@ -7,19 +7,16 @@ void ofApp::setup(){
    // int ny = 8;
     
     ofSetFrameRate(60);
-    /*gui.setup();
-    gui.setPosition(ofPoint(10,10));
-    gui.add(meshX.setup("MeshX",5,1,20));
-    gui.add(meshY.setup("MeshY",5,1,20));
-    gui.add(setMesh.setup("setMesh",false));
-    */
     Datgui = new ofxDatGui( 10, 10 );
     Datgui->addHeader("::MeshMapper::");
-    Datgui->addSlider("MESH X", 2, 50, 5);
-    Datgui->addSlider("MESH Y", 2, 50, 5);
-    Datgui->addButton("SET MESH");
-    Datgui->addToggle("PERSPECTIVE", false);
-    
+    ofxDatGuiFolder* folder = Datgui->addFolder("SETUP [s=save || l=load || f=Fullscreen]", ofColor::red);
+    folder->addSlider("MESHRES X", 2, 50, 5);
+    folder->addSlider("MESHRES Y", 2, 50, 5);
+    folder->addButton("SET MESHRESOLUTION");
+    folder->addToggle("PERSPECTIVE", false);
+    folder->addToggle("EDIT VERTICES", false);
+    folder->addToggle("SHOW INPUT", false);
+    folder->addToggle("PROJECTION MODE", false);
     Datgui->onButtonEvent(this, &ofApp::onButtonEvent);
     Datgui->onSliderEvent(this, &ofApp::onSliderEvent);
     Datgui->setOpacity(0.5);
@@ -56,11 +53,7 @@ void ofApp::update(){
     Datgui->update();
     mapMesh->update();
     mapMesh->iaverts.update();
-   /* if(setmesh==true){
-        mapMesh->clearMesh();
-        mapMesh->init(meshX, meshY);
-        setmesh=false;
-    }*/
+  
     /*
     syFbo.begin();
         syphonClient.draw(0, 0);
@@ -106,25 +99,12 @@ void ofApp::setmesh(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     
-    if(key == 'b'){
-        mapMesh->OUTQuad->enabled = true;
-        mapMesh->iaverts.disable();
-        mapMesh->iaverts.disableAllEvents();
-        
-    }
+
     
     if(key == 'f'){
         ofToggleFullscreen();
     }
-    
-    if(key == 'v'){
-        editVtcs = true;
-            mapMesh->OUTQuad->enabled = false;
-            mapMesh->iaverts.enable();
-            mapMesh->iaverts.enableMouseEvents();
-            mapMesh->iaverts.enableKeyEvents();
-        
-    }
+ 
     
     if(key == 's'){
         mapMesh->save();
@@ -133,36 +113,55 @@ void ofApp::keyPressed(int key){
     if(key == 'l'){
         mapMesh->load();
     }
-    
-    if(key == 'p'){
-        proMode = !proMode;
-    }
-    
-    if(key == 'i'){
-        inputMode = !inputMode;
-    }
-    if(key == 'o'){
-        mapMesh->OUTQuad->perspective = true;
-    }
+ 
 }
 //--------------------------------------------------------------
 void ofApp::onButtonEvent(ofxDatGuiButtonEvent e)
 {
-    if(e.target->getLabel() == "SET MESH") setmesh();
+    if(e.target->getLabel() == "SET MESHRESOLUTION") setmesh();
     else if(e.target->is("PERSPECTIVE")){
         if(e.target->getEnabled()==true){
             mapMesh->OUTQuad->perspective = true;}
         else if(e.target->getEnabled()==false){
             mapMesh->OUTQuad->perspective = false;}
         }
+    else if(e.target->is("EDIT VERTICES")){
+        if(e.target->getEnabled()==true){
+            mapMesh->OUTQuad->enabled = false;
+            mapMesh->iaverts.enable();
+            mapMesh->iaverts.enableMouseEvents();
+            mapMesh->iaverts.enableKeyEvents();
+        }
+        else if(e.target->getEnabled()==false){
+            mapMesh->OUTQuad->enabled = true;
+            mapMesh->iaverts.disable();
+            mapMesh->iaverts.disableAllEvents();
+        }
+    }
+    else if(e.target->is("SHOW INPUT")){
+        if(e.target->getEnabled()==true){
+            inputMode = true;
+    }
+        else if (e.target->getEnabled() == false){
+            inputMode = false;
+        }
+        }
+    else if(e.target->is("PROJECTION MODE")){
+        if(e.target->getEnabled()==true){
+            proMode = true;
+        }
+        else if (e.target->getEnabled() == false){
+            proMode = false;
+        }
+    }
     }
 
 //--------------------------------------------------------------
 void ofApp::onSliderEvent(ofxDatGuiSliderEvent e)
 {
-    if (e.target->getLabel() == "MESH X"){
+    if (e.target->getLabel() == "MESHRES X"){
         meshX = e.target->getValue(); meshX = meshX -1;  }
-    else if (e.target->getLabel() == "MESH Y"){
+    else if (e.target->getLabel() == "MESHRES Y"){
         meshY = e.target->getValue(); meshY = meshY -1;  }
 }
 //--------------------------------------------------------------

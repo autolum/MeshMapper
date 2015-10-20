@@ -22,7 +22,7 @@ class IOMesh {
         IAVertVec iaverts;
         vector<ofPoint> inVerts;
         ofMesh mesh;
-       // ofMatrix4x4 hMatrix;
+        vector<ofPoint> points;
         IOMesh();
         ~IOMesh();
         void init(int _nx,int _ny);
@@ -30,7 +30,7 @@ class IOMesh {
         void drawOutput();
         void update();
         void transformOut();
-        void cHomography();
+    
         void updateMesh();
         void clearMesh();
         void save();
